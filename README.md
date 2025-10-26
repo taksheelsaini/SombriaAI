@@ -1,99 +1,100 @@
 # SombriaAI — Illuminating Emotions Beyond the Surface ✨🖼️
 
-Hi — I'm Taksheel Saini. I built SombriaAI to explore expressive signals in facial images and present them in a clear, interactive way. This repo contains the model, the utilities, and a Streamlit demo so you (or faculty) can demo the idea quickly and safely.
+Hello — I'm Taksheel Saini. I built SombriaAI to experiment with expressive signals in facial images and to present the outputs in a clear, interactive demo. I wrote this README and the demo UI; the content below reflects my goals, choices, and instructions for running and exploring the project locally.
 
-> SombriaAI is a research/demo project — it surfaces emotional signals from facial imagery for educational and product-research use. It is not medical software and must never be used for clinical diagnosis. See the full disclaimer below.
+> Important: SombriaAI is a research/demo project. It surfaces emotional signals from images for educational and product research. It is not a medical device and must not be used for clinical diagnosis.
 
 ---
 
 Table of contents
+
 - About this project
 - What I built (quick tour)
-- Try it locally (quick start)
+- Quick start (how I run it locally)
 - Files you care about
 - How the model works (short technical notes)
-- Evaluation & metrics (what I measured)
+- Evaluation & metrics
 - Design choices & privacy notes
-- Development & reproducibility
-- Contact / Author
+- Reproducibility & next steps
+- Contact — me (Taksheel)
 
 ---
 
 About this project
 ------------------
 
-I wanted to build a compact, demo-friendly system that can analyze facial imagery and present probabilistic outputs in a way that's intuitive, explainable, and fun to demo. SombriaAI focuses on emotion-derived signals (not clinical diagnosis). My goals were:
+I created SombriaAI to explore how facial expressions can be translated into probabilistic emotion signals. My priorities were:
 
-- Create a small, well-documented codebase that others can run locally.
-- Provide a visually appealing UI that shows probabilities, uncertainty, and calibrated outputs.
-- Keep the original research artifacts (notebook, training artifacts) but separate the demo/deployment code so nothing breaks during experimentation.
+- Make a small, runnable codebase that others can run on a laptop.
+- Build an interactive UI that communicates uncertainty and calibration clearly.
+- Keep the research notebook and weights so experiments remain reproducible while keeping the demo code separate and stable.
 
 What I built (quick tour) 🚀
 
-- A trained MobileNetV2-based classifier and helper scripts.
-- A Streamlit demo (`app.py`) that:
-    - Lets you pick test images from the repo or upload your own.
-    - Shows calibrated probabilities, a confidence gauge, and an uncertainty meter.
-    - Has a thumbnail gallery, downloadable JSON for predictions, and a batch-evaluation mode.
-- Notebook(s) with the full training workflow and analysis (`depression_detection_project.ipynb`). I kept the notebook intact for reproducibility.
+- A MobileNetV2-based classifier and helper scripts.
+- A Streamlit demo (`app.py`) that I use to:
+  - Pick test images from the repo or upload my own.
+  - View calibrated probabilities, a confidence gauge, and an uncertainty margin.
+  - Run batch evaluation across the test images and download results as JSON.
+- The training and analysis notebook (`depression_detection_project.ipynb`) with the full experimental workflow.
 
-Quick start — run the Streamlit demo locally (2 minutes) ⏱️
+Quick start — how I run the demo locally (≈ 2 minutes)
 
-1) (Optional) Create a virtual environment and activate it
+1) (Optional) Create and activate a virtual environment
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-2) Install the UI dependencies (recommended)
+2) Install the UI packages (recommended)
 
 ```bash
 pip install -r requirements-ui.txt
 ```
 
-3) Start the demo
+3) Start the Streamlit demo
 
 ```bash
 streamlit run app.py
 ```
 
-The demo will open in your browser. Use the left sidebar to choose threshold/strategy, enable `fun mode` for a playful effect, or run batch evaluation on the included test set.
+Open the URL Streamlit shows in your browser. Use the sidebar to change strategy, threshold, or enable the playful `fun mode` when demoing.
 
 Files you care about 📁
 
-- `app.py` — Streamlit demo and the polished presentation layer (UI + model loader + Plotly visuals)
-- `best_mobilenet_depression_model.h5` — saved model weights (kept as-is for reproducibility)
-- `depression_detection_project.ipynb` — training & analysis notebook (kept unchanged)
-- `depression_data/` — reorganized binary-style dataset used for validation/test (left intact)
-- `mobilenet_model_metrics.json` — small JSON with model summary metrics
-- `requirements-ui.txt` — dependencies for running the demo UI quickly
+- `app.py` — Streamlit demo and UI code (model loading, plotting, and interaction)
+- `best_mobilenet_depression_model.h5` — saved model weights (kept for reproducibility)
+- `depression_detection_project.ipynb` — full training and analysis notebook
+- `depression_data/` — dataset folders used for validation/test (kept as-is)
+- `mobilenet_model_metrics.json` — model metrics summary
+- `requirements-ui.txt` — quick install list for the demo UI
 
-Note: I intentionally preserved dataset folder names and class labels so the training and demo code remain compatible with the original experiments.
+I kept dataset folder names and labels unchanged so scripts and notebooks stay compatible.
 
 How the model works — short technical notes 🔬
 
-- Base backbone: MobileNetV2 pre-trained on ImageNet (transfer learning).
-- Head: GlobalAveragePooling + Dense blocks with BatchNorm and Dropout, final sigmoid output for a binary decision probability.
-- Input size: 224×224 RGB for the MobileNetV2-based demo model.
-- Prediction semantics in the demo: the model outputs a probability (p) that is interpreted and displayed as two calibrated probabilities (class A / class B). The UI allows you to pick `argmax` or a `threshold` decision strategy and visualizes uncertainty using a simple margin heuristic.
+- Backbone: MobileNetV2 pretrained on ImageNet.
+- Head: GlobalAveragePooling → Dense blocks with BatchNorm + Dropout → final sigmoid for a binary probability.
+- Input: 224×224 RGB images for the MobileNetV2-based demo.
+- The demo shows probabilities for both classes, a confidence gauge, and a margin-based uncertainty indicator. Decision behavior can be `argmax` or a user-set threshold.
 
 Evaluation & metrics
 
-I measured standard classification metrics on the test set and recorded them in `mobilenet_model_metrics.json`. The demo UI also provides a batch-run mode that recomputes accuracy, balanced accuracy, F1, precision, recall, and confusion matrix for any chosen decision strategy or threshold.
+I computed standard metrics on the included test set and saved results to `mobilenet_model_metrics.json`. The demo also offers a batch mode that recomputes accuracy, balanced accuracy, F1, precision, recall, and the confusion matrix for any chosen threshold or strategy.
 
 Design choices & privacy notes 🔐
 
-- I intentionally kept all processing local. The Streamlit demo loads models and runs inference locally — there are no external API calls.
-- SombriaAI is designed for research and product exploration. It is NOT medical software. Facial expressions are noisy and context-dependent — any inferences must be treated with caution.
-- If you demo this project publicly, ensure you have consent to use any images, and prefer anonymized or synthetic images where possible.
+- All processing happens locally in the demo — there are no external API calls.
+- This project is for research and product exploration only. Observations from facial imagery are noisy and context-dependent; treat them as signals, not diagnoses.
+- When demoing publicly, obtain consent for images and prefer anonymized or synthetic images where feasible.
 
-Reproducibility & development
+Reproducibility & next steps
 
-- If you want a reproducible containerized demo, I can add a Dockerfile. Let me know and I will add one that pins TensorFlow + Streamlit versions.
-- The training notebook and the saved weights are both included. If you want the model exported to TensorFlow SavedModel format or re-saved under a particular TF/Keras version, I can provide a tiny helper script to run in the original training environment.
+- If you want, I can add a Dockerfile to pin versions and make the demo fully reproducible. Tell me and I'll add it.
+- I can also provide a helper script to re-export the model to TensorFlow SavedModel format if you need a different serialization format.
 
-Author / Contact
+Contact — me
 
 By — Taksheel Saini  
 AI/ML Privacy Product Enthusiast
@@ -102,13 +103,6 @@ AI/ML Privacy Product Enthusiast
 - GitHub: https://github.com/taksheelsaini
 - LinkedIn: https://www.linkedin.com/in/taksheelsaini
 
-If you'd like the author bio on the UI or the README to show a picture or link to a public demo, tell me which image or URL to use and I will wire it up.
-
 Disclaimer (important) ⚠️
 
-This project is for educational and research/demo purposes only. It is not a diagnostic tool and must never be used for clinical decision-making. The models are trained on limited data and are subject to bias, distribution shift, and other failure modes.
-
----
-
-Happy to keep polishing — we can make this demo production-ready or keep it a research showcase depending on your goals. 😄
-tensorflow>=2.20.0
+This project and its models are for educational and research purposes only. They are not diagnostic tools and must not be used for medical decision-making.
