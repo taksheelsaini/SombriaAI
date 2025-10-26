@@ -110,12 +110,5 @@ This project is for educational and research/demo purposes only. It is not a dia
 
 ---
 
-Want it prettier? I can:
-- Add a GIF header or a Lottie animation into the README for GitHub rendering (you’ll get an eye-catching animation).
-- Add a Dockerfile and a single-command `run-demo.sh` so visitors can start the demo reliably in a container.
-- Replace dataset folder names with SombriaAI-branded names everywhere (I avoided renaming on purpose because it changes paths used in code).
-
-Tell me which of the above (GIF header / Docker / rename dataset folders / save model in SavedModel format) you want next and I’ll apply it. 
-
 Happy to keep polishing — we can make this demo production-ready or keep it a research showcase depending on your goals. 😄
 tensorflow>=2.20.0
