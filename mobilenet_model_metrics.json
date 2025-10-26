@@ -1,0 +1,6 @@
+{
+  "model_type": "MobileNetV2_SombriaAI",
+  "image_size": 224,
+  "accuracy": 0.7835051417350769,
+  "epochs": 20
+}
